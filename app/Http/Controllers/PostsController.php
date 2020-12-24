@@ -3,30 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use App\Models\Post;
 
 
 class PostsController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth', ['except' => ['index', 'view']]);
+    }
+    
     public function create()
     {
-        if (! auth()->check())
-        {
-            abort(401, 'Debes estar logueado para poder postear');
-        }
         return view('posts.create');
     }
     
     public function delete($id)
     {
-        if (! auth()->check())
-        {
-            abort(401, 'Debes estar logueado para poder eliminar un post');
-        }
-        
         $post = Post::findOrFail($id);
         
-        if (auth()->user()->id !== $post->author_id)
+        if (Gate::denies('delete-post', $post))
         {
             abort(403, 'No puedes eliminar un post que no te pertenece');
         }
@@ -47,11 +43,6 @@ class PostsController extends Controller
     
     public function store(Request $request, $id = null)
     {
-        if (! auth()->check())
-        {
-            abort(401, 'Debes estar logueado para poder postear');
-        }
-        
         $data = $request->validate([
             'title' => 'required|max:255',
             'body' => 'required',
@@ -66,7 +57,7 @@ class PostsController extends Controller
         {
             $post = Post::findOrFail($id);
             
-            if (auth()->user()->id !== $post->author_id)
+            if (Gate::denies('update-post', $post))
             {
                 abort(403, 'No puedes modificar un post que no te pertenece');
             }
@@ -83,7 +74,7 @@ class PostsController extends Controller
     {
         $post = Post::findOrFail($id);
             
-        if (auth()->user()->id !== $post->author_id)
+        if (Gate::denies('update-post', $post))
         {
             abort(403, 'No puedes modificar un post que no te pertenece');
         }

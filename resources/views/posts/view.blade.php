@@ -6,17 +6,19 @@
             <h1>{{ $post->title }}</h1>
             <h5><i>Escrito por </i>{{ $post->author->name }}<i> el día </i>{{ $post->created_at->format('d/m/Y') }}</h5>
         </div>
-        @auth
-            @if ($post->author_id == Auth::user()->id)
-                <div class="col-auto ml-auto">
+        @canany(['update-post', 'delete-post'], $post)
+            <div class="col-auto ml-auto">
+                @can('update-post', $post)
                     <a href="{{ route('posts.update', $post) }}" class="btn btn-primary" role="button">Modificar</a>
+                @endcan
+                @can('delete-post', $post)
                     <form class="d-inline" action="{{ route('posts.delete', $post) }}" method="POST">
                         @csrf
                         <button type="submit" class="btn btn-danger">Eliminar</button>
                     </form>
-                </div>
-            @endif
-        @endauth
+                @endcan
+            </div>
+        @endcanany
     </div>
     <div class="row">
         <div class="col">

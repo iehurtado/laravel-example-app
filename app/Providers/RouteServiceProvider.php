@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
+use App\Models\Post;
+
 class RouteServiceProvider extends ServiceProvider
 {
     /**
@@ -47,6 +49,10 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
         });
+        
+        // Con esta sentencia, hago que {post} en cualquier ruta sea tomado como id
+        // y reemplazado en el action con el model correspondiente (binding explicito)
+        Route::model('post', Post::class);
     }
 
     /**

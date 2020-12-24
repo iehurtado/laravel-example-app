@@ -20,25 +20,21 @@ class PostsController extends Controller
     }
     
     
-    public function destroy($post)
+    public function destroy(Post $post)
     {
-        $model = Post::findOrFail($post);
+        $this->authorize('delete', $post);
         
-        $this->authorize('delete', $model);
-        
-        $model->delete();
+        $post->delete();
         
         return redirect(route('posts.index'));
     }
     
     
-    public function edit($post)
-    {
-        $model = Post::findOrFail($post);
-            
-        $this->authorize('update', $model);
+    public function edit(Post $post)
+    {            
+        $this->authorize('update', $post);
         
-        return view('posts.edit', ['post' => $model]);
+        return view('posts.edit', ['post' => $post]);
     }
     
     
@@ -51,11 +47,9 @@ class PostsController extends Controller
         return view('posts.index', ['posts' => $models]);
     }
     
-    public function show($post)
+    public function show(Post $post)
     {
-        $model = Post::findOrFail($post);
-        
-        return view('posts.show', ['post' => $model]);
+        return view('posts.show', ['post' => $post]);
     }
     
     
@@ -64,24 +58,23 @@ class PostsController extends Controller
         $this->authorize('create', Post::class);
         
         $data = $this->validatePost($request);
-        $model = Post::create(array_merge($data, ['author_id' => auth()->user()->id]));
+        $post = Post::create(array_merge($data, ['author_id' => auth()->user()->id]));
         
-        return redirect(route('posts.show', $model));
+        return redirect(route('posts.show', $post));
     }
     
-    public function update(Request $request, $post)
+    public function update(Request $request, Post $post)
     {
-        $model = Post::findOrFail($post);
-            
-        $this->authorize('update', $model);
+        $this->authorize('update', $post);
+        
         $data = $this->validatePost($request);
 
-        $model->title = $data['title'];
-        $model->body = $data['body'];
+        $post->title = $data['title'];
+        $post->body = $data['body'];
         
-        $model->save();
+        $post->save();
         
-        return redirect(route('posts.show', $model));
+        return redirect(route('posts.show', $post));
     }
     
     

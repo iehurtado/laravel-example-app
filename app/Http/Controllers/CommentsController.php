@@ -19,6 +19,8 @@ class CommentsController extends Controller
      */
     public function store(Request $request, Post $post)
     {
+        $this->authorize('create', Comment::class);
+        
         $data = $this->validateComment($request);
         
         $comment = new Comment();
@@ -38,6 +40,8 @@ class CommentsController extends Controller
      */
     public function show(Comment $comment)
     {
+        $this->authorize('show', $comment);
+        
         return redirect(route('posts.show', $comment->commentable));
     }
 
@@ -50,6 +54,8 @@ class CommentsController extends Controller
      */
     public function edit(Comment $comment)
     {
+        $this->authorize('update', $comment);
+        
         return view('posts.show', ['post' => $comment->commentable, 'comment' => $comment]);
     }
 
@@ -63,6 +69,8 @@ class CommentsController extends Controller
      */
     public function update(Request $request, Post $post, Comment $comment)
     {
+        $this->authorize('update', $comment);
+        
         $data = $this->validateComment($request);
         $comment->content = $data['content'];
         $comment->save();
@@ -79,6 +87,8 @@ class CommentsController extends Controller
      */
     public function destroy(Comment $comment)
     {
+        $this->authorize('delete', $comment);
+        
         $comment->delete();
         return redirect(route('posts.show', $comment->commentable));
     }

@@ -9,10 +9,11 @@
         @canany(['update', 'delete'], $post)
             <div class="col-auto ml-auto">
                 @can('update', $post)
-                    <a href="{{ route('posts.update', $post) }}" class="btn btn-primary" role="button">Modificar</a>
+                    <a href="{{ route('posts.edit', $post) }}" class="btn btn-primary" role="button">Modificar</a>
                 @endcan
                 @can('delete', $post)
-                    <form class="d-inline" action="{{ route('posts.delete', $post) }}" method="POST">
+                    <form class="d-inline" action="{{ route('posts.destroy', $post) }}" method="POST">
+                        @method('DELETE')
                         @csrf
                         <button type="submit" class="btn btn-danger">Eliminar</button>
                     </form>

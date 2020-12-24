@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use App\Models\Post;
 
 
 class PostsController extends Controller
 {
     public function __construct() {
-        $this->middleware('auth', ['except' => ['index', 'view']]);
+        $this->middleware('auth', ['except' => ['index', 'show']]);
     }
     
     
@@ -21,41 +20,42 @@ class PostsController extends Controller
     }
     
     
-    public function delete($id)
+    public function destroy($post)
     {
-        $post = Post::findOrFail($id);
+        $model = Post::findOrFail($post);
         
-        $this->authorize('delete', $post);
+        $this->authorize('delete', $model);
         
-        $post->delete();
+        $model->delete();
         
         return redirect(route('posts.index'));
     }
     
     
-    public function edit(Request $request, $id)
+    public function edit($post)
     {
-        $post = Post::findOrFail($id);
+        $model = Post::findOrFail($post);
             
-        $this->authorize('update', $post);
-        $data = $this->validatePost($request);
-
-        $post->title = $data['title'];
-        $post->body = $data['body'];
+        $this->authorize('update', $model);
         
-        $post->save();
-        
-        return redirect(route('posts.view', ['id' => $post->id]));
+        return view('posts.edit', ['post' => $model]);
     }
     
     
     public function index() 
     {
-        $posts = Post::query()
+        $models = Post::query()
             ->orderBy('created_at', 'desc')
             ->get();
         
-        return view('posts.index', ['posts' => $posts]);
+        return view('posts.index', ['posts' => $models]);
+    }
+    
+    public function show($post)
+    {
+        $model = Post::findOrFail($post);
+        
+        return view('posts.show', ['post' => $model]);
     }
     
     
@@ -64,27 +64,24 @@ class PostsController extends Controller
         $this->authorize('create', Post::class);
         
         $data = $this->validatePost($request);
-        $post = Post::create(array_merge($data, ['author_id' => auth()->user()->id]));
+        $model = Post::create(array_merge($data, ['author_id' => auth()->user()->id]));
         
-        return redirect(route('posts.view', ['id' => $post->id]));
+        return redirect(route('posts.show', $model));
     }
     
-    
-    public function update($id)
+    public function update(Request $request, $post)
     {
-        $post = Post::findOrFail($id);
+        $model = Post::findOrFail($post);
             
-        $this->authorize('update', $post);
+        $this->authorize('update', $model);
+        $data = $this->validatePost($request);
+
+        $model->title = $data['title'];
+        $model->body = $data['body'];
         
-        return view('posts.update', ['post' => $post]);
-    }
-    
-    
-    public function view($id)
-    {
-        $post = Post::findOrFail($id);
+        $model->save();
         
-        return view('posts.view', ['post' => $post]);
+        return redirect(route('posts.show', $model));
     }
     
     

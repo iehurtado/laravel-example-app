@@ -29,9 +29,9 @@ class PostAuthorizationTest extends TestCase
     {
         $post = $this->user->posts()->create(['title' => 'asdasd', 'body' => 'asdasd']);
         
-        $this->get(route('posts.view', $post))->assertOk();
-        $this->asAuthenticated()->get(route('posts.view', $post))->assertOk();
-        $this->actingAs(User::factory()->create())->get(route('posts.view', $post))->assertOk();
+        $this->get(route('posts.show', $post))->assertOk();
+        $this->asAuthenticated()->get(route('posts.show', $post))->assertOk();
+        $this->actingAs(User::factory()->create())->get(route('posts.show', $post))->assertOk();
     }
     
     public function testAutenticatedUserSeesCreateButton()
@@ -57,7 +57,7 @@ class PostAuthorizationTest extends TestCase
             ->orderBy('id', 'desc')
             ->limit(1)
             ->first();
-        $response->assertRedirect(route('posts.view', $post));
+        $response->assertRedirect(route('posts.show', $post));
     }
     
     public function testUnauthenticatedUserCantCreatePosts()
@@ -73,12 +73,12 @@ class PostAuthorizationTest extends TestCase
         $data = ['title' => 'Un titulo', 'body' => 'Un cuerpo'];
         $post = $this->user->posts()->create($data);
         
-        $this->asAuthenticated()->get(route('posts.update', $post))->assertOk();
+        $this->asAuthenticated()->get(route('posts.edit', $post))->assertOk();
         
         $data = $post->toArray();
         $data['title'] = 'Otro titulo';
-        $this->asAuthenticated()->put(route('posts.edit', $post), $data)
-            ->assertRedirect(route('posts.view', $post));
+        $this->asAuthenticated()->put(route('posts.update', $post), $data)
+            ->assertRedirect(route('posts.show', $post));
         $post->refresh();
         $this->assertEquals('Otro titulo', $post->title);
     }
@@ -91,12 +91,12 @@ class PostAuthorizationTest extends TestCase
         $anotherUser = User::factory()->create();
         
         $this->actingAs($anotherUser)
-            ->get(route('posts.update', $post))
+            ->get(route('posts.edit', $post))
             ->assertForbidden();
         
         $data = ['title' => 'Otro titulo'];
         $this->actingAs($anotherUser)
-            ->put(route('posts.edit', $post), $data)
+            ->put(route('posts.update', $post), $data)
             ->assertForbidden();
     }
     
@@ -105,12 +105,12 @@ class PostAuthorizationTest extends TestCase
         $data = ['title' => 'Un titulo', 'body' => 'Un cuerpo'];
         $post = $this->user->posts()->create($data);
         
-        $this->get(route('posts.update', $post))
-            ->assertRedirect();
+        $this->get(route('posts.edit', $post))
+            ->assertRedirect('/login');
         
         $data['title'] = 'Otro titulo';
 
-        $this->put(route('posts.edit', $post), $data)
+        $this->put(route('posts.update', $post), $data)
             ->assertRedirect('/login');
     }
     
@@ -119,7 +119,7 @@ class PostAuthorizationTest extends TestCase
         $post = $this->user->posts()->create(['title' => 'Un titulo', 'body' => 'Un cuerpo']);
         
         $this->asAuthenticated()
-            ->post(route('posts.delete', $post))
+            ->delete(route('posts.destroy', $post))
             ->assertRedirect(route('posts.index'));
     }
     
@@ -130,7 +130,7 @@ class PostAuthorizationTest extends TestCase
         $anotherUser = User::factory()->create();
         
         $this->actingAs($anotherUser)
-            ->post(route('posts.delete', $post))
+            ->delete(route('posts.destroy', $post))
             ->assertForbidden();
     }
     
@@ -138,7 +138,7 @@ class PostAuthorizationTest extends TestCase
     {
         $post = $this->user->posts()->create(['title' => 'Un titulo', 'body' => 'Un cuerpo']);
         
-        $this->post(route('posts.delete', $post))
+        $this->delete(route('posts.destroy', $post))
             ->assertRedirect('/login');
     }
     

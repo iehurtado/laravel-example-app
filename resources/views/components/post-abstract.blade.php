@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col">
             <p>{{ $post->abstract }}</p>
-            <p class="text-right"><a href="{{ route('posts.view', $post) }}">Ver más</a></p>
+            <p class="text-right"><a href="{{ route('posts.show', $post) }}">Ver más</a></p>
         </div>
     </div>
 </div>

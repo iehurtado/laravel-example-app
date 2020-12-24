@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
 use App\Models\Post;
+use Iehurtado\Comments\Models\Comment;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -53,6 +54,7 @@ class RouteServiceProvider extends ServiceProvider
         // Con esta sentencia, hago que {post} en cualquier ruta sea tomado como id
         // y reemplazado en el action con el model correspondiente (binding explicito)
         Route::model('post', Post::class);
+        Route::model('comment', Comment::class);
     }
 
     /**

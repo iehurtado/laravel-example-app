@@ -28,5 +28,25 @@
             @endforeach
         </div>
     </div>
+    <hr />
+    @empty($comment)
+    <div class="row">
+        <div class="col">
+            <x-comment-form :action="route('posts.comments.store', $post)"></x-comment-form>
+        </div>
+    </div>
+    @endempty
+    <hr />
+    <div class="row">
+        <div class="col">
+            @forelse ($post->comments as $x)
+            <div class="py-2">
+                <x-post-comment :comment="$x" :edit="isset($comment) && $x->is($comment)"></x-post-comment>
+            </div>
+            @empty
+            <div>No hay comentarios aún</div>
+            @endforelse
+        </div>
+    </div>
 </div>
 @endsection

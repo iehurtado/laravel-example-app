@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\CommentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,3 +35,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 // EQUIVALE A ESTO:
 Route::resource('posts', PostsController::class); // ;-)
+
+Route::resource('posts.comments', CommentsController::class)
+    ->shallow()
+    ->except(['index', 'create']);

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Iehurtado\Comments\Traits\IsCommentable;
 
 /**
  * Un Post.
@@ -20,7 +21,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Post extends Model
 {
-    use HasFactory;
+    use HasFactory, IsCommentable;
     
     protected $fillable = [
         'author_id',

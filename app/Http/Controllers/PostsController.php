@@ -13,21 +13,41 @@ class PostsController extends Controller
         $this->middleware('auth', ['except' => ['index', 'view']]);
     }
     
+    
     public function create()
     {
+        $this->authorize('create', Post::class);
         return view('posts.create');
     }
+    
     
     public function delete($id)
     {
         $post = Post::findOrFail($id);
         
-        Gate::authorize('delete-post', $post);
+        $this->authorize('delete', $post);
         
         $post->delete();
         
         return redirect(route('posts.index'));
     }
+    
+    
+    public function edit(Request $request, $id)
+    {
+        $post = Post::findOrFail($id);
+            
+        $this->authorize('update', $post);
+        $data = $this->validatePost($request);
+
+        $post->title = $data['title'];
+        $post->body = $data['body'];
+        
+        $post->save();
+        
+        return redirect(route('posts.view', ['id' => $post->id]));
+    }
+    
     
     public function index() 
     {
@@ -38,45 +58,41 @@ class PostsController extends Controller
         return view('posts.index', ['posts' => $posts]);
     }
     
-    public function store(Request $request, $id = null)
+    
+    public function store(Request $request)
     {
-        $data = $request->validate([
-            'title' => 'required|max:255',
-            'body' => 'required',
-        ]);
+        $this->authorize('create', Post::class);
         
-        $post = null;
-        if ($id === null)
-        {
-            $post = Post::create(array_merge($data, ['author_id' => auth()->user()->id]));
-        }
-        else
-        {
-            $post = Post::findOrFail($id);
-            
-            Gate::authorize('update-post', $post);
-            
-            $post->title = $data['title'];
-            $post->body = $data['body'];
-            $post->save();
-        }
+        $data = $this->validatePost($request);
+        $post = Post::create(array_merge($data, ['author_id' => auth()->user()->id]));
         
         return redirect(route('posts.view', ['id' => $post->id]));
     }
+    
     
     public function update($id)
     {
         $post = Post::findOrFail($id);
             
-        Gate::authorize('update-post', $post);
+        $this->authorize('update', $post);
         
-        return view('posts.create', ['post' => $post]);
+        return view('posts.update', ['post' => $post]);
     }
+    
     
     public function view($id)
     {
         $post = Post::findOrFail($id);
         
         return view('posts.view', ['post' => $post]);
+    }
+    
+    
+    protected function validatePost(Request $request)
+    {
+        return $request->validate([
+            'title' => 'required|max:255',
+            'body' => 'required',
+        ]);
     }
 }

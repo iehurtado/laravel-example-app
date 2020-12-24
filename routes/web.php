@@ -16,9 +16,7 @@ use App\Http\Controllers\PostsController;
 |
 */
 
-Route::get('/', function () {
-    return redirect('/home');
-});
+Route::redirect('/', '/home');
 
 Auth::routes();
 
@@ -30,4 +28,4 @@ Route::get('/posts/{id}/update', [PostsController::class, 'update'])->name('post
 Route::get('/posts/{id}', [PostsController::class, 'view'])->name('posts.view');
 Route::get('/posts', [PostsController::class, 'index'])->name('posts.index');
 Route::post('/posts', [PostsController::class, 'store'])->name('posts.store');
-Route::put('/posts/{id}', [PostsController::class, 'store'])->name('posts.store');
+Route::put('/posts/{id}', [PostsController::class, 'edit'])->name('posts.edit');

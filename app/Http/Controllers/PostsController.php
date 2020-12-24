@@ -22,10 +22,7 @@ class PostsController extends Controller
     {
         $post = Post::findOrFail($id);
         
-        if (Gate::denies('delete-post', $post))
-        {
-            abort(403, 'No puedes eliminar un post que no te pertenece');
-        }
+        Gate::authorize('delete-post', $post);
         
         $post->delete();
         
@@ -57,10 +54,7 @@ class PostsController extends Controller
         {
             $post = Post::findOrFail($id);
             
-            if (Gate::denies('update-post', $post))
-            {
-                abort(403, 'No puedes modificar un post que no te pertenece');
-            }
+            Gate::authorize('update-post', $post);
             
             $post->title = $data['title'];
             $post->body = $data['body'];
@@ -74,10 +68,7 @@ class PostsController extends Controller
     {
         $post = Post::findOrFail($id);
             
-        if (Gate::denies('update-post', $post))
-        {
-            abort(403, 'No puedes modificar un post que no te pertenece');
-        }
+        Gate::authorize('update-post', $post);
         
         return view('posts.create', ['post' => $post]);
     }

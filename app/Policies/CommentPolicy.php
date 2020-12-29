@@ -17,7 +17,7 @@ class CommentPolicy
      * @param  \App\Models\User  $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
         return true;
     }
@@ -29,7 +29,7 @@ class CommentPolicy
      * @param  \Iehurtado\Comments\Models\Comment  $comment
      * @return mixed
      */
-    public function view(User $user, Comment $comment)
+    public function view(?User $user, Comment $comment)
     {
         return true;
     }
@@ -40,7 +40,7 @@ class CommentPolicy
      * @param  \App\Models\User  $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(?User $user)
     {
         return true;
     }
@@ -54,7 +54,7 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment)
     {
-        return $user->is($comment->author)
+        return $user->is($comment->author) || $user->can('edit any comment')
             ? Response::allow()
             : Response::deny('No puedes editar un comentario que no te pertenece');
     }
@@ -68,7 +68,7 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        return $user->is($comment->author)
+        return $user->is($comment->author) || $user->can('delete any comment')
             ? Response::allow()
             : Response::deny('No puedes eliminar un comentario que no te pertenece');
     }

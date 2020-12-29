@@ -17,7 +17,7 @@ class PostPolicy
      * @param  \App\Models\User  $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAny(?User $user)
     {
         return true;
     }
@@ -29,7 +29,7 @@ class PostPolicy
      * @param  \App\Models\Post  $post
      * @return mixed
      */
-    public function view(User $user, Post $post)
+    public function view(?User $user, Post $post)
     {
         return true;
     }
@@ -54,7 +54,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post)
     {
-        return $post->author->is($user)
+        return $user->is($post->author) || $user->can('edit any post')
             ? Response::allow()
             : Response::deny('No puedes modificar un post que no te pertenece');
     }
@@ -68,7 +68,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post)
     {
-        return $post->author->is($user)
+        return $user->is($post->author) || $user->can('delete any post')
             ? Response::allow()
             : Response::deny('No puedes eliminar un post que no te pertenece');
     }

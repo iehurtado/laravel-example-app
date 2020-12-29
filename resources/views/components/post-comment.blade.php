@@ -1,10 +1,7 @@
 <div class="card">
     <div class="card-header clearfix">
         <span class="card-title">
-        {{ auth()->user()->is($comment->author) 
-            ? 'Escribiste: '
-            : ($comment->author->name ?? 'Anónimo') . ' escribió:'
-        }}
+        {{ $comment->author->name }} escribió:
         </span>
         @canany(['update', 'destroy'], $comment)
             <span class="float-right">

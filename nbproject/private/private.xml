@@ -3,7 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/mono/code/laravel-example-app/app/Models/Link.php</file>
+            <file>file:/home/mono/code/laravel-example-app/app/Policies/CommentPolicy.php</file>
+            <file>file:/home/mono/code/laravel-example-app/app/Providers/AuthServiceProvider.php</file>
+            <file>file:/home/mono/code/laravel-example-app/app/Http/Controllers/CommentsController.php</file>
+            <file>file:/home/mono/code/laravel-example-app/app/Policies/PostPolicy.php</file>
+            <file>file:/home/mono/code/laravel-example-app/app/Http/Controllers/PostsController.php</file>
+            <file>file:/home/mono/code/laravel-example-app/app/Providers/RouteServiceProvider.php</file>
         </group>
     </open-files>
 </project-private>

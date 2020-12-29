@@ -40,7 +40,7 @@ class CommentsController extends Controller
      */
     public function show(Comment $comment)
     {
-        $this->authorize('show', $comment);
+        $this->authorize('view', $comment);
         
         return redirect(route('posts.show', $comment->commentable));
     }

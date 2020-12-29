@@ -13,10 +13,15 @@ La estructura es la típica de un proyecto Laravel, como se explica <a href="htt
 ```
 $ composer install
 ```
+3. Luego ejecutar:
+```
+$ npm install
+$ npm build dev
+```
 
-3. Modificar el archivo .env creado en la raíz del proyecto con los parámetros requeridos para la base de datos.
+4. Modificar el archivo .env creado en la raíz del proyecto con los parámetros requeridos para la base de datos. Si no se creó, copiar .env.example como .env
 
-4. Ejecutar:
+5. Ejecutar:
 ```
 $ php artisan migrate --seed
 ```
@@ -25,3 +30,17 @@ En este último paso deberían haberse generado las tablas con algunos datos de 
 - email: usuario@app.com, password: abc123123, rol: ninguno
 - email: moderador@app.com, password: abc123123, rol: 'moderator'
 - email: admin@app.com, password: abc123123, rol: 'admin'
+
+6. Ejecutar:
+```
+$ php artisan key:generate
+```
+
+# Iniciar servidor de desarrollo
+Parado en el proyecto, ejecutar:
+
+```
+$ php artisan serve
+```
+
+Con esto estamos iniciando el servidor de desarrollo. Por defecto atiende en http://localhost:8000

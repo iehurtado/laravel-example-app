@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b3d7ad253a1d87d9ce20e6523429a060",
+    "content-hash": "4f566da8f1908e0460d06f10adc0b6be",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -897,7 +897,7 @@
             "version": "v1.0.1",
             "source": {
                 "type": "git",
-                "url": "git@github.com:iehurtado/laravel-example-package.git",
+                "url": "https://github.com/iehurtado/laravel-example-package.git",
                 "reference": "bb44a5f04830476c547780cf3401510ecc225ae2"
             },
             "dist": {
